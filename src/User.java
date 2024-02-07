@@ -67,7 +67,7 @@ public class User extends Person {
         this.assignedBooks.put(book, new DatesRecord());
         System.out.println("The book successfully taken");
         Librarian.updateBookCount(book, -1);
-        return "Book successfully taken.";
+        return "The books successfully taken.";
 
     }
 
@@ -82,9 +82,12 @@ public class User extends Person {
         this.booksBorrowedBefore.put(dates, book);
         assignedBooks.remove(book);
         Librarian.updateBookCount(book, +1);
-        return "The book successfully given back";
+
+        double bill = dates.calculateTimeDifferenceInSeconds() * 0.5;
+        return "The book successfully given back and You need to pay: " + bill + " Tl";
 
     }
+
 
     public Map<DatesRecord, Book> getHistory() {
         return this.booksBorrowedBefore;
