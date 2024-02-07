@@ -1,30 +1,37 @@
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class DatesRecord implements Comparable<DatesRecord> {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-    private final String borrowedDate;
-    private String giveBackDate;
+    private final LocalDateTime borrowedDate;
+    private LocalDateTime giveBackDate;
 
     public DatesRecord() {
-        this.borrowedDate = dtf.format(LocalDateTime.now());
-        ;
+        this.borrowedDate = LocalDateTime.now();
     }
 
-    public String getBorrowedDate() {
+    public LocalDateTime getBorrowedDate() {
         return this.borrowedDate;
     }
 
-    public String getGiveBackDate() {
+    public LocalDateTime getGiveBackDate() {
         return this.giveBackDate;
     }
 
-
     public void setGiveBackDate() {
-        this.giveBackDate = dtf.format(LocalDateTime.now());
+        this.giveBackDate = LocalDateTime.now();
     }
 
+    public long calculateTimeDifferenceInSeconds() {
+        if (giveBackDate != null) {
+            Duration duration = Duration.between(borrowedDate, giveBackDate);
+            return duration.getSeconds();
+        } else {
+            throw new IllegalStateException("Give-back date is not set.");
+        }
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -42,8 +49,8 @@ public class DatesRecord implements Comparable<DatesRecord> {
     @Override
     public String toString() {
         return "DatesRecord{" +
-                ", borrowedDate='" + borrowedDate + '\'' +
-                ", giveBackDate='" + giveBackDate + '\'' +
+                "borrowedDate=" + dtf.format(borrowedDate) + "\n" +
+                ", giveBackDate=" + (giveBackDate != null ? dtf.format(giveBackDate) : "null") +
                 '}';
     }
 
@@ -51,5 +58,4 @@ public class DatesRecord implements Comparable<DatesRecord> {
     public int compareTo(DatesRecord other) {
         return this.borrowedDate.compareTo(other.getBorrowedDate());
     }
-
 }
